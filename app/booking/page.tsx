@@ -3,13 +3,14 @@ import { useEffect,useState } from "react";
 import {useSearchParams} from "next/navigation";
 import Link from "next/link";
 import { Stethoscope, User, Clock, FileText, CheckCircle } from "lucide-react";
+import{Suspense} from 'react';
 
 type TimeSlot ={
   id : number;
   date : string;
   time :string;
 }
-export default function Booking() {
+ function BookingContent() {
 
 const searchParams = useSearchParams();
 const doctorId = searchParams.get("doctor") || "1"; //its default doctor id = 1 for exemple
@@ -17,7 +18,7 @@ const doctorId = searchParams.get("doctor") || "1"; //its default doctor id = 1 
 const[slots, setSlots] = useState <TimeSlot[]>([]);
 const [selectedSlot ,setSelectedSlot] = useState<TimeSlot | null>(null);
 const [visible, setVisible] = useState(false);
-// animation on load
+//animation on load
 useEffect(() => { setTimeout(() => setVisible(true), 100); }, []);
 
 useEffect(() =>{
@@ -169,5 +170,12 @@ useEffect(() =>{
         2026 © Tetouan Doctor. Tétouan, Maroc.
       </footer>
     </main>
+  );
+}
+export default function Booking() {
+  return (
+    <Suspense fallback={<div>Chargement...</div>}>
+      <BookingContent />
+    </Suspense>
   );
 }
